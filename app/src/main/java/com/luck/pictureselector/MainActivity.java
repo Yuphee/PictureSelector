@@ -24,6 +24,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.pictureselector.adapter.GridImageAdapter;
+import com.luck.pictureselector.utils.CommonUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -251,6 +252,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     for (LocalMedia media : selectList) {
                         Log.i("图片-----》", media.getPath());
+                        File originFile = new File(media.getPath());
+                        String originSize = CommonUtils.convertFileSize(originFile.length());
+                        Log.i("图片-----》", "压缩前 size:"+originSize);
+                        Log.i("图片-----》", "isCompressed: " + media.isCompressed());
+                        if (media.isCompressed()) {
+                            File file = new File(media.getCompressPath());
+                            String size = CommonUtils.convertFileSize(file.length());
+                            Log.i("图片-----》", "压缩后 size:"+size);
+                        }
                     }
                     adapter.setList(selectList);
                     adapter.notifyDataSetChanged();

@@ -10,12 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.luck.picture.lib.compress.Luban;
-import com.luck.picture.lib.compress.OnCompressListener;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
@@ -205,32 +203,48 @@ public class PictureBaseActivity extends FragmentActivity {
      */
     protected void compressImage(final List<LocalMedia> result) {
         showCompressDialog();
-        if (config.synOrAsy) {
-            Flowable.just(result)
-                    .observeOn(Schedulers.io())
-                    .map(new Function<List<LocalMedia>, List<File>>() {
-                        @Override
-                        public List<File> apply(@NonNull List<LocalMedia> list) throws Exception {
-                            List<File> files = Luban.with(mContext)
-                                    .setTargetDir(config.compressSavePath)
-                                    .ignoreBy(config.minimumCompressSize)
-                                    .loadLocalMedia(list).get();
-                            if (files == null) {
-                                files = new ArrayList<>();
-                            }
-                            return files;
+        final List<File> photos = new ArrayList<>();
+        for (LocalMedia media : result) {
+            photos.add(new File(media.isCut() ? media.getCutPath() : media.getPath()));
+        }
+        //if (config.synOrAsy) {
+        Flowable.just(photos)
+                .map(new Function<List<File>, List<File>>() {
+                    @Override
+                    public List<File> apply(List<File> strings) throws Exception {
+                        List<File> files = Luban.with(mContext)
+                                .setTargetDir(config.compressSavePath)
+                                .ignoreBy(config.minimumCompressSize)
+                                .load(strings)
+                                .get();
+                        if (files == null) {
+                            files = new ArrayList<>();
                         }
-                    })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<List<File>>() {
-                        @Override
-                        public void accept(@NonNull List<File> files) throws Exception {
-                            handleCompressCallBack(result, files);
-                        }
-                    });
-        } else {
+                        return files;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<File>>() {
+                    @Override
+                    public void accept(List<File> files) throws Exception {
+                        handleCompressCallBack(result, files);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        handleCompressCallBack(result, photos);
+                    }
+                });
+        //}
+        /* else {
+            List<String> photos = new ArrayList<>();
+            for (LocalMedia media : result) {
+                photos.add(media.isCut() ? media.getCutPath() : media.getPath());
+            }
+
             Luban.with(this)
-                    .loadLocalMedia(result)
+                    .load(result)
                     .ignoreBy(config.minimumCompressSize)
                     .setTargetDir(config.compressSavePath)
                     .setCompressListener(new OnCompressListener() {
@@ -250,7 +264,7 @@ public class PictureBaseActivity extends FragmentActivity {
                             onResult(result);
                         }
                     }).launch();
-        }
+        }*/
     }
 
     /**
