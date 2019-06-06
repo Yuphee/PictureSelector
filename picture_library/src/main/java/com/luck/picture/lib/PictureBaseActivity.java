@@ -223,8 +223,8 @@ public class PictureBaseActivity extends FragmentActivity {
                         return files;
                     }
                 })
-                .observeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<File>>() {
                     @Override
                     public void accept(List<File> files) throws Exception {
