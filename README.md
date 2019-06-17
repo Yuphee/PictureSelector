@@ -68,48 +68,22 @@
 
 
 ## 集成方式
+Step 1. Add the JitPack repository to your build file
+Add it in your root build.gradle at the end of repositories:
 
-方式一 compile引入
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://www.jitpack.io' }
+		}
+	}
+	
+Step 2. Add the dependency
 
-```
-dependencies {
-    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
-}
-
-```
-
-项目根目录build.gradle加入
-
-```
-allprojects {
-   repositories {
-      jcenter()
-      maven { url 'https://jitpack.io' }
-   }
-}
-```
-
-方式二 maven引入
-
-step 1.
-```
-<repositories>
-       <repository>
-       <id>jitpack.io</id>
-	<url>https://jitpack.io</url>
-       </repository>
- </repositories>
-```
-step 2.
-```
-
-<dependency>
-      <groupId>com.github.LuckSiege.PictureSelector</groupId>
-      <artifactId>picture_library</artifactId>
-      <version>v2.2.3</version> 
-</dependency>
-
-```
+	dependencies {
+	        implementation 'com.github.EthanCo.PictureSelector:picture_library:3.0.1'
+			implementation 'com.github.EthanCo.PictureSelector:ucrop:3.0.1'
+	}
 
 ## 常见错误
 ```
