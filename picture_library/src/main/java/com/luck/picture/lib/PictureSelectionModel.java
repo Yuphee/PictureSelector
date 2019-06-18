@@ -34,7 +34,7 @@ public class PictureSelectionModel {
         this.selector = selector;
         selectionConfig = PictureSelectionConfig.getCleanInstance();
         selectionConfig.mimeType = mimeType;
-        initOutPutPath(selector);
+        //initOutPutPath(selector);
     }
 
     public PictureSelectionModel(PictureSelector selector, int mimeType, boolean camera) {
@@ -42,7 +42,7 @@ public class PictureSelectionModel {
         selectionConfig = PictureSelectionConfig.getCleanInstance();
         selectionConfig.camera = camera;
         selectionConfig.mimeType = mimeType;
-        initOutPutPath(selector);
+        //initOutPutPath(selector);
     }
 
     private void initOutPutPath(PictureSelector selector) {
