@@ -2,17 +2,18 @@ package com.luck.picture.lib;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
-import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DoubleUtils;
 
-import java.io.Serializable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class PictureSelectionModel {
         this.selector = selector;
         selectionConfig = PictureSelectionConfig.getCleanInstance();
         selectionConfig.mimeType = mimeType;
+        initOutPutPath(selector);
     }
 
     public PictureSelectionModel(PictureSelector selector, int mimeType, boolean camera) {
@@ -40,6 +42,26 @@ public class PictureSelectionModel {
         selectionConfig = PictureSelectionConfig.getCleanInstance();
         selectionConfig.camera = camera;
         selectionConfig.mimeType = mimeType;
+        initOutPutPath(selector);
+    }
+
+    private void initOutPutPath(PictureSelector selector) {
+        boolean existSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        Log.i(Constans.TAG, "existSDCard:" + existSDCard);
+        if (existSDCard) {
+            File cameraDir = new File(selector.getActivity().getExternalCacheDir(),"camera");
+            if (!cameraDir.exists()) {
+                cameraDir.mkdirs();
+            }
+            selectionConfig.outputCameraPath = cameraDir.getPath();
+            File compressDir = new File(selector.getActivity().getExternalCacheDir(),"compress");
+            if (!compressDir.exists()) {
+                compressDir.mkdirs();
+            }
+            selectionConfig.compressSavePath = compressDir.getPath();
+            Log.i(Constans.TAG, "outputCameraPath:" + selectionConfig.outputCameraPath);
+            Log.i(Constans.TAG, "compressSavePath:" + selectionConfig.compressSavePath);
+        }
     }
 
     /**

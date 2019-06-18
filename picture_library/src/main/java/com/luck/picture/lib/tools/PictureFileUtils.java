@@ -62,13 +62,18 @@ public class PictureFileUtils {
      * @return
      */
     public static File createCameraFile(Context context, int type, String outputCameraPath, String format) {
-        String path = !TextUtils.isEmpty(outputCameraPath)
-                ? outputCameraPath : CAMERA_PATH;
+        boolean outputCameraPathEmpty = TextUtils.isEmpty(outputCameraPath);
+        if (!outputCameraPathEmpty) {
 
-        return createMediaFile(context, path, type, format);
+        }
+        String path = !outputCameraPathEmpty
+                ? outputCameraPath : CAMERA_PATH;
+        return createMediaFile(context, path, type, format, !outputCameraPathEmpty);
     }
 
     /**
+     * 绝对路径
+     *
      * @param context
      * @param type
      * @param format
@@ -78,12 +83,17 @@ public class PictureFileUtils {
         return createMediaFile(context, CROP_PATH, type, format);
     }
 
-    private static File createMediaFile(Context context, String parentPath, int type, String format) {
+    private static File createMediaFile(Context context, String path, int type, String format, boolean isAbsolute) {
         String state = Environment.getExternalStorageState();
         File rootDir = state.equals(Environment.MEDIA_MOUNTED) ?
                 Environment.getExternalStorageDirectory() : context.getCacheDir();
 
-        File folderDir = new File(rootDir.getAbsolutePath() + parentPath);
+        File folderDir;
+        if (isAbsolute) {
+            folderDir = new File(path);
+        } else {
+            folderDir = new File(rootDir.getAbsolutePath() + path);
+        }
         if (!folderDir.exists() && folderDir.mkdirs()) {
 
         }
@@ -102,6 +112,10 @@ public class PictureFileUtils {
                 break;
         }
         return tmpFile;
+    }
+
+    private static File createMediaFile(Context context, String parentPath, int type, String format) {
+        return createMediaFile(context, parentPath, type, format, false);
     }
 
 
