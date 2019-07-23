@@ -81,8 +81,9 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.EthanCo.PictureSelector:picture_library:3.0.1'
-			implementation 'com.github.EthanCo.PictureSelector:ucrop:3.0.1'
+	        implementation 'com.github.EthanCo.PictureSelector:picture_library:3.0.4'
+			implementation 'com.github.EthanCo.PictureSelector:ucrop:3.0.4' //可选:裁剪库
+			implementation 'com.github.EthanCo.PictureSelector:camera:3.0.4' //可选:自定义相机库
 	}
 
 ## 常见错误
