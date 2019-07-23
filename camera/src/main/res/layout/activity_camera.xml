@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CameraActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!--<com.camerakit.CameraKitView-->
+        <!--android:id="@+id/camera"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--app:camera_facing="back"-->
+        <!--app:camera_focus="continuous"-->
+        <!--app:camera_imageJpegQuality="100"-->
+        <!--app:camera_imageMegaPixels="2.0"-->
+        <!--app:camera_permissions="camera" />-->
+        <!--app:camera_flash="auto"-->
+        <com.camerakit.CameraKitView
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="false"
+            android:keepScreenOn="true"
+            app:camera_facing="back"
+            app:camera_focus="continuous"
+            app:camera_permissions="camera" />
+
+        <FrameLayout
+            android:id="@+id/layout_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:paddingLeft="16dp"
+            android:paddingTop="18dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:background="@drawable/ic_close_white" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layout_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:paddingLeft="8dp"
+            android:paddingTop="14dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/cb_flash"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_flash"
+                android:button="@null"
+                android:clickable="false"
+                android:focusable="false" />
+        </FrameLayout>
+
+    </FrameLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_photo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/video_button"
+        android:enabled="false" />
+</LinearLayout>

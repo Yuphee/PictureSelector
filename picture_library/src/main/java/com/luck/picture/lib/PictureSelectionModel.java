@@ -45,16 +45,25 @@ public class PictureSelectionModel {
         //initOutPutPath(selector);
     }
 
+    public PictureSelectionModel(PictureSelector selector, int mimeType, boolean camera, boolean customCamera) {
+        this.selector = selector;
+        selectionConfig = PictureSelectionConfig.getCleanInstance();
+        selectionConfig.camera = camera;
+        selectionConfig.mimeType = mimeType;
+        selectionConfig.customCamera = customCamera;
+        //initOutPutPath(selector);
+    }
+
     private void initOutPutPath(PictureSelector selector) {
         boolean existSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
         Log.i(Constans.TAG, "existSDCard:" + existSDCard);
         if (existSDCard) {
-            File cameraDir = new File(selector.getActivity().getExternalCacheDir(),"camera");
+            File cameraDir = new File(selector.getActivity().getExternalCacheDir(), "camera");
             if (!cameraDir.exists()) {
                 cameraDir.mkdirs();
             }
             selectionConfig.outputCameraPath = cameraDir.getPath();
-            File compressDir = new File(selector.getActivity().getExternalCacheDir(),"compress");
+            File compressDir = new File(selector.getActivity().getExternalCacheDir(), "compress");
             if (!compressDir.exists()) {
                 compressDir.mkdirs();
             }

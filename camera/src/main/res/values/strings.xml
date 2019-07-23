@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">camera</string>
+
+    <string name="url_github">https://github.com/wonderkiln/camerakit-android</string>
+    <string name="url_website">http://camerakit.website</string>
+
+    <string name="about_dialog_title">About</string>
+    <string name="about_dialog_message">CameraKit is open source software distributed under the MIT license.\n\nFor more details visit www.camerakit.website/.</string>
+
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+</resources>

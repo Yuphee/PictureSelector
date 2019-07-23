@@ -49,7 +49,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener,
     private CheckBox cb_voice, cb_choose_mode, cb_isCamera, cb_isGif,
             cb_preview_img, cb_preview_video, cb_crop, cb_compress,
             cb_mode, cb_hide, cb_crop_circular, cb_styleCrop, cb_showCropGrid,
-            cb_showCropFrame, cb_preview_audio;
+            cb_showCropFrame, cb_preview_audio, cb_custom_mode;
     private int themeId;
     private int chooseMode = PictureMimeType.ofAll();
 
@@ -81,6 +81,7 @@ public class PhotoFragment extends Fragment implements View.OnClickListener,
         cb_styleCrop = (CheckBox) rootView.findViewById(R.id.cb_styleCrop);
         cb_compress = (CheckBox) rootView.findViewById(R.id.cb_compress);
         cb_mode = (CheckBox) rootView.findViewById(R.id.cb_mode);
+        cb_custom_mode = rootView.findViewById(R.id.cb_custom_mode);
         cb_showCropGrid = (CheckBox) rootView.findViewById(R.id.cb_showCropGrid);
         cb_showCropFrame = (CheckBox) rootView.findViewById(R.id.cb_showCropFrame);
         cb_preview_audio = (CheckBox) rootView.findViewById(R.id.cb_preview_audio);
@@ -131,7 +132,33 @@ public class PhotoFragment extends Fragment implements View.OnClickListener,
         @Override
         public void onAddPicClick() {
             boolean mode = cb_mode.isChecked();
-            if (mode) {
+            boolean customMode = cb_custom_mode.isChecked();
+            if (customMode) {
+                // 自定义相机
+                PictureSelector.create(PhotoFragment.this)
+                        .openCustomCamera(chooseMode)
+                        .theme(themeId)
+                        .maxSelectNum(maxSelectNum)
+                        .minSelectNum(1)
+                        .selectionMode(cb_choose_mode.isChecked() ? PictureConfig.MULTIPLE : PictureConfig.SINGLE)
+                        .previewImage(cb_preview_img.isChecked())
+                        .previewVideo(cb_preview_video.isChecked())
+                        .enablePreviewAudio(cb_preview_audio.isChecked()) // 是否可播放音频
+                        .isCamera(cb_isCamera.isChecked())
+                        .enableCrop(cb_crop.isChecked())
+                        .compress(cb_compress.isChecked())
+                        .glideOverride(160, 160)
+                        .withAspectRatio(aspect_ratio_x, aspect_ratio_y)
+                        .hideBottomControls(cb_hide.isChecked() ? false : true)
+                        .isGif(cb_isGif.isChecked())
+                        .freeStyleCropEnabled(cb_styleCrop.isChecked())
+                        .circleDimmedLayer(cb_crop_circular.isChecked())
+                        .showCropFrame(cb_showCropFrame.isChecked())
+                        .showCropGrid(cb_showCropGrid.isChecked())
+                        .openClickSound(cb_voice.isChecked())
+                        .selectionMedia(selectList)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
+            } else if (mode) {
                 // 进入相册 以下是例子：不需要的api可以不写
                 PictureSelector.create(PhotoFragment.this)
                         .openGallery(chooseMode)

@@ -22,6 +22,7 @@ public final class PictureConfig {
     public final static String BUNDLE_ORIGINAL_PATH = "OriginalPath";
     public final static String EXTRA_BOTTOM_PREVIEW = "bottom_preview";
     public final static String EXTRA_CONFIG = "PictureSelectorConfig";
+    public static final String ACTION_CUSTOM_CAMERA = "action.picture_selector.custom_camera";
     public final static String IMAGE = "image";
     public final static String VIDEO = "video";
 

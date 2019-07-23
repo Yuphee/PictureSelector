@@ -80,6 +80,16 @@ public final class PictureSelector {
     }
 
     /**
+     * 自定义相机
+     *
+     * @param mimeType
+     * @return
+     */
+    public PictureSelectionModel openCustomCamera(int mimeType) {
+        return new PictureSelectionModel(this, mimeType, true, true);
+    }
+
+    /**
      * 外部预览时设置样式
      *
      * @param themeStyle

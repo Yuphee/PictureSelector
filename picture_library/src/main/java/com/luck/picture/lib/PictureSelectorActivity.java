@@ -344,13 +344,19 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                             popupWindow.dismiss();
                         }
                         popupWindow.showAsDropDown(rl_picture_title);
+                    } else if (config.customCamera) {
+                        startCustomCamera();
                     } else {
                         startOpenCamera();
                     }
                     break;
                 case PictureConfig.TYPE_IMAGE:
                     // 拍照
-                    startOpenCamera();
+                    if (config.customCamera) {
+                        startCustomCamera();
+                    } else {
+                        startOpenCamera();
+                    }
                     break;
                 case PictureConfig.TYPE_VIDEO:
                     // 录视频
@@ -361,6 +367,20 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     startOpenCameraAudio();
                     break;
             }
+        }
+    }
+
+    public void startCustomCamera() {
+        Intent cameraIntent = new Intent(PictureConfig.ACTION_CUSTOM_CAMERA);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            int type = config.mimeType == PictureConfig.TYPE_ALL ? PictureConfig.TYPE_IMAGE : config.mimeType;
+            File cameraFile = PictureFileUtils.createCameraFile(this,
+                    type,
+                    outputCameraPath, config.suffixType);
+            cameraPath = cameraFile.getAbsolutePath();
+            //Uri imageUri = parUri(cameraFile);
+            cameraIntent.putExtra("output", cameraPath);
+            startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
     }
 
