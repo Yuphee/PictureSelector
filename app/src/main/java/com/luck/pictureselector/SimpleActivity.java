@@ -1,7 +1,10 @@
 package com.luck.pictureselector;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +25,10 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_camera).setOnClickListener(this);
         btn_activity.setOnClickListener(this);
         btn_fragment.setOnClickListener(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
     }
 
     @Override

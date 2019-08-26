@@ -1,36 +1,73 @@
 package com.heiko.camera;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 
-import com.camerakit.CameraKit;
-import com.camerakit.CameraKitView;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.CameraLogger;
+import com.otaliastudios.cameraview.CameraOptions;
+import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.Flash;
+import com.otaliastudios.cameraview.Size;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
-public class CameraActivity extends Activity {
 
-    private CameraKitView cameraView;
-    private AppCompatButton photoButton;
+public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private CameraView camera;
+
+    private boolean mCapturingPicture;
+
+    // To show stuff in the callback
+    private Size mCaptureNativeSize;
+    private long mCaptureTime;
+
+    public static final String TAG = "Picture-CameraActivity";
     private String outputPath;
-    public static final String SP_FLASH = "sp_flash";
-    public static final String TAG = "CameraKitView";
-    private CheckBox cbFlash;
+    private File mFile;
     private CameraStore cameraStore;
-    private long startTime;
-    private static final int FLASH_WAIT_TIME = 1000;
+    private CheckBox cbFlash;
+
+    public static final String SP_FLASH_ENABLE = "SP_FLASH_ENABLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         setContentView(R.layout.activity_camera);
+        CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE);
+
+        camera = findViewById(R.id.camera);
+        camera.setLifecycleOwner(this);
+        camera.addCameraListener(new CameraListener() {
+            public void onCameraOpened(CameraOptions options) {
+                Log.i(TAG, "onCameraOpened 当相机打开");
+            }
+
+            public void onPictureTaken(byte[] jpeg) {
+                Log.i(TAG, "onPictureTaken 拍照回调");
+                onPicture(jpeg);
+            }
+
+            @Override
+            public void onVideoTaken(File video) {
+                Log.i(TAG, "onVideoTaken ");
+                super.onVideoTaken(video);
+            }
+        });
+
+        findViewById(R.id.btn_photo).setOnClickListener(this);
 
         Log.v(TAG, "onCreate");
         Bundle extras = getIntent().getExtras();
@@ -38,196 +75,110 @@ public class CameraActivity extends Activity {
             outputPath = extras.getString("output");
             Log.i(TAG, "output:" + outputPath);
         }
-        cameraView = findViewById(R.id.camera);
-        photoButton = findViewById(R.id.btn_photo);
-        photoButton.setOnClickListener(photoOnClickListener);
-        cbFlash = findViewById(R.id.cb_flash);
+        mFile = new File(outputPath);
+        Log.i(TAG, "mFile:" + mFile.getPath());
 
         cameraStore = new CameraStore(this);
-        boolean isFlashOpen = cameraStore.getBoolean(SP_FLASH, false);
-        cbFlash.setChecked(isFlashOpen);
-        setFlash(isFlashOpen);
 
-        cameraView.setCameraListener(new CameraKitView.CameraListener() {
+        cbFlash = findViewById(R.id.cb_flash);
+        View layoutFlash = findViewById(R.id.layout_flash);
+        layoutFlash.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onOpened() {
-                Log.v(TAG, "CameraListener: onOpened()");
-            }
-
-            @Override
-            public void onClosed() {
-                Log.v(TAG, "CameraListener: onClosed()");
+            public void onClick(View view) {
+                setFlash(!cbFlash.isChecked());
             }
         });
 
-        cameraView.setPreviewListener(new CameraKitView.PreviewListener() {
-            @Override
-            public void onStart() {
-                Log.v(TAG, "PreviewListener: onStart()");
-                //updateInfoText();
-                startTime = System.currentTimeMillis();
-                photoButton.setEnabled(true);
-            }
+        setFlash(cameraStore.getBoolean(SP_FLASH_ENABLE, false));
 
-            @Override
-            public void onStop() {
-                Log.v(TAG, "PreviewListener: onStop()");
-            }
-        });
-
-        cameraView.requestPermissions(this);
-        /*cameraView.setPermissionsListener(new CameraKitView.PermissionsListener() {
-            @Override
-            public void onPermissionsSuccess() {
-
-            }
-
-            @Override
-            public void onPermissionsFailure() {
-
-            }
-        });*/
-
-        findViewById(R.id.layout_close).setOnClickListener(new View.OnClickListener() {
+        View layoutClose = findViewById(R.id.layout_close);
+        layoutClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CameraActivity.this.finish();
             }
         });
+    }
 
-        findViewById(R.id.layout_flash).setOnClickListener(new View.OnClickListener() {
+    private void setFlash(boolean enable) {
+        cameraStore.putBoolean(SP_FLASH_ENABLE, enable);
+        if (enable) {
+            camera.setFlash(Flash.ON);
+            cbFlash.setChecked(true);
+        } else {
+            camera.setFlash(Flash.OFF);
+            cbFlash.setChecked(false);
+        }
+    }
+
+    private void onPicture(final byte[] jpeg) {
+        mCapturingPicture = false;
+        long callbackTime = System.currentTimeMillis();
+
+        // This can happen if picture was taken with a gesture.
+        if (mCaptureTime == 0) mCaptureTime = callbackTime - 300;
+        if (mCaptureNativeSize == null) mCaptureNativeSize = camera.getPictureSize();
+
+
+        mCaptureTime = 0;
+        mCaptureNativeSize = null;
+
+        new Thread() {
             @Override
-            public void onClick(View view) {
-                boolean operation = !cbFlash.isChecked();
-                Log.i(TAG, "operation:" + operation);
-                setFlash(operation);
-                cbFlash.setChecked(operation);
-                cameraStore.putBoolean(SP_FLASH, operation);
+            public void run() {
+                super.run();
+
+                ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
+                shutter.play();
+
+                FileOutputStream output = null;
+                try {
+                    Log.i(TAG, "写入图片:" + mFile.getPath() + " 是否存在:" + mFile.exists() + " buffer:" + jpeg.length);
+                    output = new FileOutputStream(mFile);
+                    output.write(jpeg);
+                    Log.i(TAG, "写入图片成功");
+                    setResult(Activity.RESULT_OK);
+                    CameraActivity.this.finish();
+                } catch (IOException e) {
+                    Log.e(TAG, "写入图片失败:" + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (null != output) {
+                        try {
+                            output.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
-        });
+        }.start();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        cameraView.onStart();
+    public void onClick(View view) {
+        if (view.getId() == R.id.btn_photo) {
+            capturePhoto();
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        cameraView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        cameraView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        cameraView.onStop();
-        super.onStop();
+    private void capturePhoto() {
+        if (mCapturingPicture) return;
+        mCapturingPicture = true;
+        mCaptureTime = System.currentTimeMillis();
+        mCaptureNativeSize = camera.getPictureSize();
+        camera.capturePicture();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        cameraView.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private long lastTime = 0;
-
-    private View.OnClickListener photoOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (System.currentTimeMillis() - lastTime > FLASH_WAIT_TIME) {
-                lastTime = System.currentTimeMillis();
-                //防止多次点击
-
-                boolean isFlashOpen = cbFlash.isChecked();
-
-                Log.i(TAG, "isFlashOpen:" + isFlashOpen);
-                if (isFlashOpen) {
-                    long dTime = System.currentTimeMillis() - startTime;
-                    Log.i(TAG, "dTime:" + dTime);
-                    if (dTime > FLASH_WAIT_TIME) {
-                        realTakePicture();
-                    } else {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                realTakePicture();
-                            }
-                        }, FLASH_WAIT_TIME - dTime);
-                    }
-                } else {
-                    realTakePicture();
-                }
-            }
+        boolean valid = true;
+        for (int grantResult : grantResults) {
+            valid = valid && grantResult == PackageManager.PERMISSION_GRANTED;
         }
-
-        private void realTakePicture() {
-            Log.v(TAG, "photo button click");
-            new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
-                    shutter.play();
-                }
-            }.start();
-            Log.i(TAG, "camera");
-            cameraView.captureImage(new CameraKitView.ImageCallback() {
-                @Override
-                public void onImage(CameraKitView view, final byte[] photo) {
-                    Log.i(TAG, "onImage:" + photo.length);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i(TAG, "onImage save.");
-                            File savedPhoto = new File(outputPath);
-                            try {
-                                FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
-                                outputStream.write(photo);
-                                outputStream.close();
-                            } catch (java.io.IOException e) {
-                                e.printStackTrace();
-                            }
-                            setResult(Activity.RESULT_OK);
-                            CameraActivity.this.finish();
-                        }
-                    }).start();
-                }
-            });
-
-            /*cameraView.setCameraListener(new CameraKitView.CameraListener() {
-                @Override
-                public void onOpened() {
-
-                }
-
-                @Override
-                public void onClosed() {
-
-                }
-            });*/
+        if (valid && !camera.isStarted()) {
+            camera.start();
         }
-    };
-
-    private void setFlash(boolean isOpen) {
-        if (isOpen) {
-            if (cameraView.getFlash() != CameraKit.FLASH_ON) {
-                cameraView.setFlash(CameraKit.FLASH_ON);
-                startTime = System.currentTimeMillis();
-            }
-        } else {
-            if (cameraView.getFlash() != CameraKit.FLASH_OFF) {
-                cameraView.setFlash(CameraKit.FLASH_OFF);
-                startTime = System.currentTimeMillis();
-            }
-        }
-        Log.i(TAG, "setFlash:" + isOpen);
     }
 }

@@ -25,36 +25,26 @@
         <!--app:camera_permissions="camera" />-->
         <!--app:camera_flash="auto"-->
 
-        <!--        <com.camerakit.CameraKitView-->
-        <!--            android:id="@+id/camera"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:adjustViewBounds="false"-->
-        <!--            android:keepScreenOn="true"-->
-        <!--            app:camera_facing="back"-->
-        <!--            app:camera_focus="continuous"-->
-        <!--            app:camera_permissions="camera" />-->
+<!--        <android.support.constraint.ConstraintLayout-->
+<!--            android:width="match_parent"-->
+<!--            android:height="match_parent"-->
+<!--            >-->
 
-        <com.otaliastudios.cameraview.CameraView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+<!--        </android.support.constraint.ConstraintLayout>-->
+
+<!--        android:layout_width="1440px"-->
+<!--        android:layout_height="1920px"-->
+
+        <com.camerakit.CameraKitView
             android:id="@+id/camera"
-            android:layout_width="1440px"
-            android:layout_height="1920px"
-            android:layout_gravity="center"
+            android:layout_width="1080px"
+            android:layout_height="1440px"
+            android:adjustViewBounds="false"
             android:keepScreenOn="true"
-            app:cameraPlaySounds="true"
-            app:cameraGrid="off"
-            app:cameraCropOutput="false"
-            app:cameraFacing="back"
-            app:cameraFlash="off"
-            app:cameraAudio="on"
-            app:cameraGestureTap="focusWithMarker"
-            app:cameraGestureLongTap="none"
-            app:cameraGesturePinch="zoom"
-            app:cameraGestureScrollHorizontal="exposureCorrection"
-            app:cameraGestureScrollVertical="none"
-            app:cameraJpegQuality="60"
-            app:cameraSessionType="picture" />
+            app:camera_facing="back"
+            app:camera_focus="continuous"
+            app:camera_permissions="camera" />
+
 
         <FrameLayout
             android:id="@+id/layout_close"
@@ -92,16 +82,15 @@
                 android:focusable="false" />
         </FrameLayout>
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_photo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/video_button"
+            android:enabled="true" />
     </FrameLayout>
 
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_photo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/video_button"
-        android:enabled="true" />
 </LinearLayout>

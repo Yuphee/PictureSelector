@@ -9,7 +9,7 @@
     <application>
         <activity android:name=".CameraActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@style/AppTheme.FullScreen.Camera">
             <intent-filter>
                 <action android:name="action.picture_selector.custom_camera" />
                 <category android:name="android.intent.category.DEFAULT" />
