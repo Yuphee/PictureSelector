@@ -128,9 +128,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             public void run() {
                 super.run();
 
-                ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
-                shutter.play();
-
                 FileOutputStream output = null;
                 try {
                     Log.i(TAG, "写入图片:" + mFile.getPath() + " 是否存在:" + mFile.exists() + " buffer:" + jpeg.length);
@@ -168,6 +165,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         mCaptureTime = System.currentTimeMillis();
         mCaptureNativeSize = camera.getPictureSize();
         camera.capturePicture();
+
+        ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
+        shutter.play();
     }
 
     @Override

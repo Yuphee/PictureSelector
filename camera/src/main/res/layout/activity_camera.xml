@@ -8,38 +8,21 @@
     android:orientation="vertical"
     tools:context=".CameraActivity">
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!--<com.camerakit.CameraKitView-->
-        <!--android:id="@+id/camera"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--app:camera_facing="back"-->
-        <!--app:camera_focus="continuous"-->
-        <!--app:camera_imageJpegQuality="100"-->
-        <!--app:camera_imageMegaPixels="2.0"-->
-        <!--app:camera_permissions="camera" />-->
-        <!--app:camera_flash="auto"-->
-
-        <!--        <com.camerakit.CameraKitView-->
-        <!--            android:id="@+id/camera"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:adjustViewBounds="false"-->
-        <!--            android:keepScreenOn="true"-->
-        <!--            app:camera_facing="back"-->
-        <!--            app:camera_focus="continuous"-->
-        <!--            app:camera_permissions="camera" />-->
-
         <com.otaliastudios.cameraview.CameraView
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/camera"
-            android:layout_width="1440px"
-            android:layout_height="1920px"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="w,4:3"
             android:layout_gravity="center"
             android:keepScreenOn="true"
             app:cameraPlaySounds="true"
@@ -47,16 +30,18 @@
             app:cameraCropOutput="false"
             app:cameraFacing="back"
             app:cameraFlash="off"
-            app:cameraAudio="on"
+            app:cameraAudio="off"
             app:cameraGestureTap="focusWithMarker"
             app:cameraGestureLongTap="none"
             app:cameraGesturePinch="zoom"
             app:cameraGestureScrollHorizontal="exposureCorrection"
             app:cameraGestureScrollVertical="none"
-            app:cameraJpegQuality="60"
+            app:cameraJpegQuality="100"
             app:cameraSessionType="picture" />
 
         <FrameLayout
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/layout_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,6 +58,8 @@
         </FrameLayout>
 
         <FrameLayout
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/layout_flash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +79,7 @@
                 android:focusable="false" />
         </FrameLayout>
 
-    </FrameLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
     <android.support.v7.widget.AppCompatButton
