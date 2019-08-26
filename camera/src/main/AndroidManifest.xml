@@ -8,6 +8,7 @@
 
     <application>
         <activity android:name=".CameraActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="action.picture_selector.custom_camera" />
