@@ -1,6 +1,7 @@
 package com.heiko.camera;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,11 +35,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     public static final String TAG = "Picture-CameraActivity";
     private String outputPath;
+    private boolean enablePreview;
     private File mFile;
     private CameraStore cameraStore;
     private CheckBox cbFlash;
 
     public static final String SP_FLASH_ENABLE = "SP_FLASH_ENABLE";
+    public static final int REQUEST_COMPLETE = 1653;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             outputPath = extras.getString("output");
-            Log.i(TAG, "output:" + outputPath);
+            enablePreview = extras.getBoolean("enable_preview");
+            Log.i(TAG, "output:" + outputPath + " enablePreview:" + enablePreview);
         }
         mFile = new File(outputPath);
         Log.i(TAG, "mFile:" + mFile.getPath());
@@ -95,7 +99,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         layoutClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CameraActivity.this.finish();
+                finish();
             }
         });
     }
@@ -134,8 +138,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     output = new FileOutputStream(mFile);
                     output.write(jpeg);
                     Log.i(TAG, "写入图片成功");
-                    setResult(Activity.RESULT_OK);
-                    CameraActivity.this.finish();
+
+                    if (enablePreview) {
+                        ImagePreviewActivity.start(CameraActivity.this, mFile.getPath(), REQUEST_COMPLETE);
+                    } else {
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+
                 } catch (IOException e) {
                     Log.e(TAG, "写入图片失败:" + e.getMessage());
                     e.printStackTrace();
@@ -179,6 +189,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (valid && !camera.isStarted()) {
             camera.start();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_COMPLETE && resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
         }
     }
 }

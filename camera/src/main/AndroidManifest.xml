@@ -15,5 +15,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ImagePreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScreen.Camera"/>
     </application>
 </manifest>

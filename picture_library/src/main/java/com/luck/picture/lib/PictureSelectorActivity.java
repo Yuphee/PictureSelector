@@ -380,6 +380,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             cameraPath = cameraFile.getAbsolutePath();
             //Uri imageUri = parUri(cameraFile);
             cameraIntent.putExtra("output", cameraPath);
+            cameraIntent.putExtra("enable_preview", config.enablePreview);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
     }
