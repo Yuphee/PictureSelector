@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".CameraActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -26,7 +26,7 @@
             android:layout_gravity="center"
             android:keepScreenOn="true" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout

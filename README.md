@@ -108,7 +108,7 @@ Step 2. Add the dependency
  application下添加如下节点:
  
  <provider
-      android:name="android.support.v4.content.FileProvider"
+      android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.provider"
       android:exported="false"
       android:grantUriPermissions="true">
