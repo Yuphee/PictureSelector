@@ -4,19 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
 import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Flash;
-import com.otaliastudios.cameraview.Size;
+import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.VideoResult;
+import com.otaliastudios.cameraview.controls.Flash;
+import com.otaliastudios.cameraview.size.Size;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,19 +57,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         camera = findViewById(R.id.camera);
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
+            @Override
             public void onCameraOpened(CameraOptions options) {
                 Log.i(TAG, "onCameraOpened 当相机打开");
             }
 
-            public void onPictureTaken(byte[] jpeg) {
+            @Override
+            public void onPictureTaken(@NonNull PictureResult result) {
+                super.onPictureTaken(result);
                 Log.i(TAG, "onPictureTaken 拍照回调");
-                onPicture(jpeg);
+                onPicture(result.getData());
             }
 
             @Override
-            public void onVideoTaken(File video) {
+            public void onVideoTaken(@NonNull VideoResult result) {
+                super.onVideoTaken(result);
                 Log.i(TAG, "onVideoTaken ");
-                super.onVideoTaken(video);
             }
         });
 
@@ -135,17 +141,19 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 FileOutputStream output = null;
                 try {
                     Log.i(TAG, "写入图片:" + mFile.getPath() + " 是否存在:" + mFile.exists() + " buffer:" + jpeg.length);
+                    if (mFile.exists()) {
+                        boolean result = mFile.delete();
+                        Log.i(TAG, "写入图片result:" + result);
+                    }
                     output = new FileOutputStream(mFile);
                     output.write(jpeg);
                     Log.i(TAG, "写入图片成功");
-
                     if (enablePreview) {
                         ImagePreviewActivity.start(CameraActivity.this, mFile.getPath(), REQUEST_COMPLETE);
                     } else {
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
-
                 } catch (IOException e) {
                     Log.e(TAG, "写入图片失败:" + e.getMessage());
                     e.printStackTrace();
@@ -174,7 +182,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         mCapturingPicture = true;
         mCaptureTime = System.currentTimeMillis();
         mCaptureNativeSize = camera.getPictureSize();
-        camera.capturePicture();
+        //camera.capturePicture();
+        camera.takePicture();
 
         ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
         shutter.play();
@@ -187,8 +196,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         for (int grantResult : grantResults) {
             valid = valid && grantResult == PackageManager.PERMISSION_GRANTED;
         }
-        if (valid && !camera.isStarted()) {
-            camera.start();
+        if (valid && !camera.isOpened()) {
+            camera.open();
         }
     }
 

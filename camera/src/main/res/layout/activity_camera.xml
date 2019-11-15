@@ -27,17 +27,15 @@
             android:keepScreenOn="true"
             app:cameraPlaySounds="true"
             app:cameraGrid="off"
-            app:cameraCropOutput="false"
             app:cameraFacing="back"
             app:cameraFlash="off"
             app:cameraAudio="off"
-            app:cameraGestureTap="focusWithMarker"
+            app:cameraGestureTap="autoFocus"
             app:cameraGestureLongTap="none"
             app:cameraGesturePinch="zoom"
             app:cameraGestureScrollHorizontal="exposureCorrection"
             app:cameraGestureScrollVertical="none"
-            app:cameraJpegQuality="100"
-            app:cameraSessionType="picture" />
+            app:cameraMode="picture" />
 
         <FrameLayout
             app:layout_constraintLeft_toLeftOf="parent"
