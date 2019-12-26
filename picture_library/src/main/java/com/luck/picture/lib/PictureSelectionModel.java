@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.StyleRes;
@@ -431,6 +432,28 @@ public class PictureSelectionModel {
     }
 
     /**
+     * 是否开启拍照音效
+     *
+     * @param cameraVoice
+     * @return
+     */
+    public PictureSelectionModel cameraVoice(boolean cameraVoice) {
+        selectionConfig.cameraVoice = cameraVoice;
+        return this;
+    }
+
+    /**
+     * 覆盖在照相机上面的图层
+     *
+     * @param cameraMask
+     * @return
+     */
+    public PictureSelectionModel cameraMask(@DrawableRes int cameraMask) {
+        selectionConfig.cameraMask = cameraMask;
+        return this;
+    }
+
+    /**
      * Start to select media and wait for result.
      *
      * @param requestCode Identity of the request Activity or Fragment.
@@ -479,5 +502,4 @@ public class PictureSelectionModel {
             throw new NullPointerException("This PictureSelector is Null");
         }
     }
-
 }

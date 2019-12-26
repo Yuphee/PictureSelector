@@ -50,6 +50,7 @@ public final class PictureSelectionConfig implements Parcelable {
     public boolean isCamera;
     public boolean isGif;
     public boolean enablePreview;
+    public boolean cameraVoice;
     public boolean enPreviewVideo;
     public boolean enablePreviewAudio;
     public boolean checkNumMode;
@@ -68,6 +69,7 @@ public final class PictureSelectionConfig implements Parcelable {
 
     public List<LocalMedia> selectionMedias;
     public boolean customCamera;
+    public int cameraMask;
 
     private void reset() {
         mimeType = PictureConfig.TYPE_IMAGE;
@@ -93,6 +95,7 @@ public final class PictureSelectionConfig implements Parcelable {
         isCamera = true;
         isGif = false;
         enablePreview = true;
+        cameraVoice = true;
         enPreviewVideo = true;
         enablePreviewAudio = true;
         checkNumMode = false;
@@ -131,6 +134,9 @@ public final class PictureSelectionConfig implements Parcelable {
         private static final PictureSelectionConfig INSTANCE = new PictureSelectionConfig();
     }
 
+    public PictureSelectionConfig() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -166,6 +172,7 @@ public final class PictureSelectionConfig implements Parcelable {
         dest.writeByte(this.isCamera ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isGif ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enablePreview ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.cameraVoice ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enPreviewVideo ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enablePreviewAudio ? (byte) 1 : (byte) 0);
         dest.writeByte(this.checkNumMode ? (byte) 1 : (byte) 0);
@@ -183,9 +190,7 @@ public final class PictureSelectionConfig implements Parcelable {
         dest.writeByte(this.isDragFrame ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.selectionMedias);
         dest.writeByte(this.customCamera ? (byte) 1 : (byte) 0);
-    }
-
-    public PictureSelectionConfig() {
+        dest.writeInt(this.cameraMask);
     }
 
     protected PictureSelectionConfig(Parcel in) {
@@ -217,6 +222,7 @@ public final class PictureSelectionConfig implements Parcelable {
         this.isCamera = in.readByte() != 0;
         this.isGif = in.readByte() != 0;
         this.enablePreview = in.readByte() != 0;
+        this.cameraVoice = in.readByte() != 0;
         this.enPreviewVideo = in.readByte() != 0;
         this.enablePreviewAudio = in.readByte() != 0;
         this.checkNumMode = in.readByte() != 0;
@@ -234,9 +240,10 @@ public final class PictureSelectionConfig implements Parcelable {
         this.isDragFrame = in.readByte() != 0;
         this.selectionMedias = in.createTypedArrayList(LocalMedia.CREATOR);
         this.customCamera = in.readByte() != 0;
+        this.cameraMask = in.readInt();
     }
 
-    public static final Parcelable.Creator<PictureSelectionConfig> CREATOR = new Parcelable.Creator<PictureSelectionConfig>() {
+    public static final Creator<PictureSelectionConfig> CREATOR = new Creator<PictureSelectionConfig>() {
         @Override
         public PictureSelectionConfig createFromParcel(Parcel source) {
             return new PictureSelectionConfig(source);

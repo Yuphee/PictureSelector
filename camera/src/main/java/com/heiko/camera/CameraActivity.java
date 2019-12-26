@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public static final String TAG = "Picture-CameraActivity";
     private String outputPath;
     private boolean enablePreview;
+    private boolean enableVoice;
+    private Integer maskImgRes;
     private File mFile;
     private CameraStore cameraStore;
     private CheckBox cbFlash;
@@ -83,6 +86,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if (extras != null) {
             outputPath = extras.getString("output");
             enablePreview = extras.getBoolean("enable_preview");
+            enableVoice = extras.getBoolean("enable_voice");
+            maskImgRes = extras.getInt("mask_img_res", -1);
+
             Log.i(TAG, "output:" + outputPath + " enablePreview:" + enablePreview);
         }
         mFile = new File(outputPath);
@@ -108,6 +114,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
             }
         });
+
+        if (maskImgRes > 0) {
+            ImageView imgCameraMask = findViewById(R.id.img_camera_mask);
+            imgCameraMask.setVisibility(View.VISIBLE);
+            imgCameraMask.setImageDrawable(getResources().getDrawable(maskImgRes));
+        }
     }
 
     private void setFlash(boolean enable) {
@@ -185,8 +197,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         //camera.capturePicture();
         camera.takePicture();
 
-        ShutterPlayer shutter = new ShutterPlayer(CameraActivity.this);
-        shutter.play();
+        if (enableVoice) {
+            new ShutterPlayer(CameraActivity.this).play();
+        }
     }
 
     @Override

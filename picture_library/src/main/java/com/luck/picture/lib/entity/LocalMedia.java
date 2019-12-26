@@ -166,6 +166,23 @@ public class LocalMedia implements Parcelable {
         this.height = height;
     }
 
+    /**
+     * 获取最终的文件路径
+     *
+     * @return
+     */
+    public String getMediaPath() {
+        String result;
+        if (compressed) {
+            result = compressPath;
+        } else if (isCut) {
+            result = cutPath;
+        } else {
+            result = path;
+        }
+        return result;
+    }
+
     @Override
     public int describeContents() {
         return 0;

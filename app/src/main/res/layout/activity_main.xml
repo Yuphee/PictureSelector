@@ -185,6 +185,16 @@
                 android:textSize="14sp" />
 
             <CheckBox
+                android:id="@+id/cb_camera_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:gravity="center_vertical"
+                android:text="拍照声音"
+                android:textColor="@color/color_53"
+                android:textSize="14sp" />
+
+            <CheckBox
                 android:id="@+id/cb_choose_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

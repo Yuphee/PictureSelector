@@ -382,6 +382,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             //Uri imageUri = parUri(cameraFile);
             cameraIntent.putExtra("output", cameraPath);
             cameraIntent.putExtra("enable_preview", config.enablePreview);
+            cameraIntent.putExtra("enable_voice", config.cameraVoice);
+            cameraIntent.putExtra("mask_img_res", config.cameraMask);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }
     }

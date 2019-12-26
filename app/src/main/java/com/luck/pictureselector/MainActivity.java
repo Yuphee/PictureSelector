@@ -4,10 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.IdRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,6 +12,11 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CheckBox cb_voice, cb_choose_mode, cb_isCamera, cb_isGif,
             cb_preview_img, cb_preview_video, cb_crop, cb_compress,
             cb_mode, cb_hide, cb_crop_circular, cb_styleCrop, cb_showCropGrid,
-            cb_showCropFrame, cb_preview_audio, cb_custom_mode;
+            cb_showCropFrame, cb_preview_audio, cb_custom_mode, cb_camera_voice;
     private int themeId;
     private int chooseMode = PictureMimeType.ofAll();
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cb_preview_audio = (CheckBox) findViewById(R.id.cb_preview_audio);
         cb_hide = (CheckBox) findViewById(R.id.cb_hide);
         cb_crop_circular = (CheckBox) findViewById(R.id.cb_crop_circular);
+        cb_camera_voice = (CheckBox) findViewById(R.id.cb_camera_voice);
         rgb_crop.setOnCheckedChangeListener(this);
         rgb_style.setOnCheckedChangeListener(this);
         rgb_photo_mode.setOnCheckedChangeListener(this);
@@ -188,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //.scaleEnabled()// 裁剪是否可放大缩小图片
                         //.videoQuality()// 视频录制质量 0 or 1
                         //.videoSecond()////显示多少秒以内的视频or音频也可适用
+                        .cameraVoice(cb_camera_voice.isChecked())
+                        .cameraMask(R.drawable.img_camera_mask) //拍照覆盖图层
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
             } else if (mode) {
                 // 进入相册 以下是例子：不需要的api可以不写
@@ -291,12 +295,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.i("图片-----》", media.getPath());
                         File originFile = new File(media.getPath());
                         String originSize = CommonUtils.convertFileSize(originFile.length());
-                        Log.i("图片-----》", "压缩前 size:"+originSize);
+                        Log.i("图片-----》", "压缩前 size:" + originSize);
                         Log.i("图片-----》", "isCompressed: " + media.isCompressed());
                         if (media.isCompressed()) {
                             File file = new File(media.getCompressPath());
                             String size = CommonUtils.convertFileSize(file.length());
-                            Log.i("图片-----》", "压缩后 size:"+size);
+                            Log.i("图片-----》", "压缩后 size:" + size);
                         }
                     }
                     adapter.setList(selectList);
