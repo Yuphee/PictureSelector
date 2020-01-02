@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             boolean mode = cb_mode.isChecked();
             boolean customMode = cb_custom_mode.isChecked();
             if (customMode) {
+                CameraReceiverHelper.getInstance().register(MainActivity.this);
+
                 // 自定义相机
                 PictureSelector.create(MainActivity.this)
                         .openCustomCamera(chooseMode)// 单独拍照，也可录像或也可音频 看你传入的类型是图片or视频
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //.videoQuality()// 视频录制质量 0 or 1
                         //.videoSecond()////显示多少秒以内的视频or音频也可适用
                         .cameraVoice(cb_camera_voice.isChecked())
-                        .cameraMask(R.drawable.img_camera_mask) //拍照覆盖图层
+                        //.cameraMask(R.drawable.img_camera_mask) //拍照覆盖图层
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
             } else if (mode) {
                 // 进入相册 以下是例子：不需要的api可以不写
@@ -284,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
+                    CameraReceiverHelper.getInstance().unregisteer();
                     // 图片选择结果回调
                     selectList = PictureSelector.obtainMultipleResult(data);
                     // 例如 LocalMedia 里面返回三种path

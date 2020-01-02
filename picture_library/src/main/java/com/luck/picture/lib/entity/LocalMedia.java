@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import java.io.File;
+
 /**
  * author：luck
  * project：PictureSelector
@@ -181,6 +183,15 @@ public class LocalMedia implements Parcelable {
             result = path;
         }
         return result;
+    }
+
+    /**
+     * 获取最终的文件路径
+     *
+     * @return
+     */
+    public File getMediaFile() {
+        return new File(getMediaPath());
     }
 
     @Override

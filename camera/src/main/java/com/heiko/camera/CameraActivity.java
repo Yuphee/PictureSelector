@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
@@ -196,6 +197,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         mCaptureNativeSize = camera.getPictureSize();
         //camera.capturePicture();
         camera.takePicture();
+
+        Intent intent = new Intent("action.com.luck.pictureselector.takePicture");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
         if (enableVoice) {
             new ShutterPlayer(CameraActivity.this).play();
