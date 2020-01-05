@@ -38,7 +38,7 @@ public class CameraReceiverHelper {
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
-    public void unregisteer() {
+    public void unregister() {
         synchronized (this) {
             if (localReceiver != null) {
                 localBroadcastManager.unregisterReceiver(localReceiver);

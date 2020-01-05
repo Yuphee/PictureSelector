@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
-                    CameraReceiverHelper.getInstance().unregisteer();
+                    CameraReceiverHelper.getInstance().unregister();
                     // 图片选择结果回调
                     selectList = PictureSelector.obtainMultipleResult(data);
                     // 例如 LocalMedia 里面返回三种path
