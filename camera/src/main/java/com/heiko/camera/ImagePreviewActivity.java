@@ -2,9 +2,6 @@ package com.heiko.camera;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +9,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.IOException;
 
@@ -47,7 +47,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
         imgComplete = findViewById(R.id.img_complete);
         imgClose = findViewById(R.id.img_close);
 
-        Bitmap bitmap = BitmapFactory.decodeFile(url);
+        /*Bitmap bitmap = BitmapFactory.decodeFile(url);
         int degree = getExifOrientation(url);
         if (degree == 90 || degree == 180 || degree == 270) { //有些摄像头方向不同，需要判断图片角度，进行旋转
             // Roate preview icon according to exif orientation
@@ -57,7 +57,12 @@ public class ImagePreviewActivity extends AppCompatActivity {
                     0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         }
-        imgPreview.setImageBitmap(bitmap);
+        imgPreview.setImageBitmap(bitmap);*/
+        //Log.i("TAGs", "url:" + url);
+        Glide.with(this).load(url)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imgPreview);
         imgComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
