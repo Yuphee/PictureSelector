@@ -161,12 +161,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     output = new FileOutputStream(mFile);
                     output.write(jpeg);
                     Log.i(TAG, "写入图片成功");
-                    if (enablePreview) {
-                        ImagePreviewActivity.start(CameraActivity.this, mFile.getPath(), REQUEST_COMPLETE);
-                    } else {
-                        setResult(Activity.RESULT_OK);
-                        finish();
-                    }
                 } catch (IOException e) {
                     Log.e(TAG, "写入图片失败:" + e.getMessage());
                     e.printStackTrace();
@@ -178,6 +172,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                             e.printStackTrace();
                         }
                     }
+                }
+
+                if (enablePreview) {
+                    ImagePreviewActivity.start(CameraActivity.this, mFile.getPath(), REQUEST_COMPLETE);
+                } else {
+                    setResult(Activity.RESULT_OK);
+                    finish();
                 }
             }
         }.start();
