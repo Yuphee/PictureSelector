@@ -18,7 +18,7 @@
 
 
     <!-- Base application theme. -->
-    <style name="AppTheme.PictureSelector" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.PictureSelector" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/bar_grey</item>
         <item name="colorPrimaryDark">@color/bar_grey</item>
