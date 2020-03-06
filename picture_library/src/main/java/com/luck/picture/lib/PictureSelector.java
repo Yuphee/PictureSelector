@@ -3,6 +3,7 @@ package com.luck.picture.lib;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -61,6 +62,10 @@ public final class PictureSelector {
      */
     public static PictureSelector create(Fragment fragment) {
         return new PictureSelector(fragment);
+    }
+
+    public static PictureSelector create(Activity activity, Fragment fragment) {
+        return new PictureSelector(activity, fragment);
     }
 
     /**
