@@ -76,12 +76,13 @@
             android:paddingRight="16dp"
             android:paddingBottom="8dp">
 
-            <CheckBox
-                android:id="@+id/cb_flash"
+            <ImageView
+                android:id="@+id/img_flash"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
                 android:background="@drawable/selector_flash"
                 android:button="@null"
+                android:tag="0"
                 android:clickable="false"
                 android:focusable="false" />
         </FrameLayout>

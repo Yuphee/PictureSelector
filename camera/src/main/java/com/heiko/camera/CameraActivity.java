@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -45,9 +44,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private Integer maskImgRes;
     private File mFile;
     private CameraStore cameraStore;
-    private CheckBox cbFlash;
+    private ImageView imgFlash;
 
-    public static final String SP_FLASH_ENABLE = "SP_FLASH_ENABLE";
+    public static final String SP_FLASH_ENABLE = "SP_FLASH_ENABLE_V2";
     public static final int REQUEST_COMPLETE = 1653;
 
     @Override
@@ -97,16 +96,19 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
         cameraStore = new CameraStore(this);
 
-        cbFlash = findViewById(R.id.cb_flash);
+        imgFlash = findViewById(R.id.img_flash);
         View layoutFlash = findViewById(R.id.layout_flash);
         layoutFlash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setFlash(!cbFlash.isChecked());
+                int flashState = Integer.valueOf(imgFlash.getTag().toString());
+                flashState = (++flashState) % 4;
+                setFlash(flashState);
             }
         });
 
-        setFlash(cameraStore.getBoolean(SP_FLASH_ENABLE, false));
+        int flashState = cameraStore.getInt(SP_FLASH_ENABLE, FlashEnum.AUTO);
+        setFlash(flashState);
 
         View layoutClose = findViewById(R.id.layout_close);
         layoutClose.setOnClickListener(new View.OnClickListener() {
@@ -123,14 +125,26 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void setFlash(boolean enable) {
-        cameraStore.putBoolean(SP_FLASH_ENABLE, enable);
-        if (enable) {
-            camera.setFlash(Flash.ON);
-            cbFlash.setChecked(true);
-        } else {
-            camera.setFlash(Flash.OFF);
-            cbFlash.setChecked(false);
+    private void setFlash(@FlashEnum int flashEnum) {
+        cameraStore.putInt(SP_FLASH_ENABLE, flashEnum);
+        imgFlash.setTag(flashEnum);
+        switch (flashEnum) {
+            case FlashEnum.AUTO:
+                camera.setFlash(Flash.AUTO);
+                imgFlash.setBackgroundResource(R.drawable.ic_flash_auto);
+                break;
+            case FlashEnum.ON:
+                camera.setFlash(Flash.ON);
+                imgFlash.setBackgroundResource(R.drawable.ic_flash_open);
+                break;
+            case FlashEnum.OFF:
+                camera.setFlash(Flash.OFF);
+                imgFlash.setBackgroundResource(R.drawable.ic_flash_close);
+                break;
+            case FlashEnum.TORCH:
+                camera.setFlash(Flash.TORCH);
+                imgFlash.setBackgroundResource(R.drawable.ic_flash_torch);
+                break;
         }
     }
 
