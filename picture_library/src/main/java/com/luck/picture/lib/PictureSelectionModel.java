@@ -443,6 +443,17 @@ public class PictureSelectionModel {
     }
 
     /**
+     * 是否允许切换前置摄像头
+     *
+     * @param cameraFacing
+     * @return
+     */
+    public PictureSelectionModel cameraFacing(boolean cameraFacing) {
+        selectionConfig.cameraFacing = cameraFacing;
+        return this;
+    }
+
+    /**
      * 覆盖在照相机上面的图层
      *
      * @param cameraMask

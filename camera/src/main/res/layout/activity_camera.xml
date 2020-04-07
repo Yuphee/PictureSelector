@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#222222"
     android:layout_height="match_parent"
+    android:background="#222222"
     android:orientation="vertical"
     tools:context=".CameraActivity">
 
@@ -14,41 +14,39 @@
         android:layout_weight="1">
 
         <com.otaliastudios.cameraview.CameraView
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/camera"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="w,4:3"
             android:layout_gravity="center"
             android:keepScreenOn="true"
-            app:cameraPlaySounds="true"
-            app:cameraGrid="off"
+            app:cameraAudio="off"
             app:cameraFacing="back"
             app:cameraFlash="off"
-            app:cameraAudio="off"
-            app:cameraGestureTap="autoFocus"
             app:cameraGestureLongTap="none"
             app:cameraGesturePinch="zoom"
             app:cameraGestureScrollHorizontal="exposureCorrection"
             app:cameraGestureScrollVertical="none"
-            app:cameraMode="picture" />
+            app:cameraGestureTap="autoFocus"
+            app:cameraGrid="off"
+            app:cameraMode="picture"
+            app:cameraPlaySounds="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,4:3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/img_camera_mask"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/layout_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +54,9 @@
             android:paddingLeft="16dp"
             android:paddingTop="18dp"
             android:paddingRight="8dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="26dp"
@@ -65,8 +65,6 @@
         </FrameLayout>
 
         <FrameLayout
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/layout_flash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,7 +72,9 @@
             android:paddingLeft="8dp"
             android:paddingTop="14dp"
             android:paddingRight="16dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/img_flash"
@@ -82,21 +82,41 @@
                 android:layout_height="23dp"
                 android:background="@drawable/selector_flash"
                 android:button="@null"
-                android:tag="0"
                 android:clickable="false"
-                android:focusable="false" />
+                android:focusable="false"
+                android:tag="0" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_photo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/video_button"
-        android:enabled="true" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_photo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/video_button"
+            android:enabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/img_camera_facing"
+            android:background="@drawable/ic_camera_facing"
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

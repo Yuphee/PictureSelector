@@ -383,6 +383,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             cameraIntent.putExtra("output", cameraPath);
             cameraIntent.putExtra("enable_preview", config.enablePreview);
             cameraIntent.putExtra("enable_voice", config.cameraVoice);
+            cameraIntent.putExtra("enable_facing", config.cameraFacing);
             cameraIntent.putExtra("mask_img_res", config.cameraMask);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
         }

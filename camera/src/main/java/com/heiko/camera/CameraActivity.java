@@ -1,5 +1,6 @@
 package com.heiko.camera;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,10 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.otaliastudios.cameraview.CameraListener;
@@ -19,6 +22,7 @@ import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.VideoResult;
+import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Flash;
 import com.otaliastudios.cameraview.size.Size;
 
@@ -41,6 +45,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private String outputPath;
     private boolean enablePreview;
     private boolean enableVoice;
+    private boolean enableFacing;
     private Integer maskImgRes;
     private File mFile;
     private CameraStore cameraStore;
@@ -48,6 +53,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     public static final String SP_FLASH_ENABLE = "SP_FLASH_ENABLE_V2";
     public static final int REQUEST_COMPLETE = 1653;
+    private AppCompatButton imgCameraFacing;
+    private boolean isFrontFacing = false; //是否是前置摄像头
+    ObjectAnimator facingAnimator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +95,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             outputPath = extras.getString("output");
             enablePreview = extras.getBoolean("enable_preview");
             enableVoice = extras.getBoolean("enable_voice");
+            enableFacing = extras.getBoolean("enable_facing");
             maskImgRes = extras.getInt("mask_img_res", -1);
 
             Log.i(TAG, "output:" + outputPath + " enablePreview:" + enablePreview);
@@ -123,6 +132,34 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             imgCameraMask.setVisibility(View.VISIBLE);
             imgCameraMask.setImageDrawable(getResources().getDrawable(maskImgRes));
         }
+
+        imgCameraFacing = findViewById(R.id.img_camera_facing);
+        imgCameraFacing.setVisibility(enableFacing ? View.VISIBLE : View.GONE);
+        if (enableFacing) {
+            imgCameraFacing.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchCameraFacing();
+                }
+            });
+        }
+    }
+
+    //切换前/后摄像头
+    private void switchCameraFacing() {
+        if (facingAnimator != null && facingAnimator.isRunning()) {
+            return;
+        }
+        facingAnimator = ObjectAnimator.ofFloat(imgCameraFacing, "rotation", 0, -180);
+        facingAnimator.setDuration(300);
+        facingAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        facingAnimator.start();
+        if (isFrontFacing) {
+            camera.setFacing(Facing.BACK);
+        } else {
+            camera.setFacing(Facing.FRONT);
+        }
+        isFrontFacing = !isFrontFacing;
     }
 
     private void setFlash(@FlashEnum int flashEnum) {

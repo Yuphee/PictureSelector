@@ -51,6 +51,7 @@ public final class PictureSelectionConfig implements Parcelable {
     public boolean isGif;
     public boolean enablePreview;
     public boolean cameraVoice;
+    public boolean cameraFacing;
     public boolean enPreviewVideo;
     public boolean enablePreviewAudio;
     public boolean checkNumMode;
@@ -96,6 +97,7 @@ public final class PictureSelectionConfig implements Parcelable {
         isGif = false;
         enablePreview = true;
         cameraVoice = true;
+        cameraFacing = false;
         enPreviewVideo = true;
         enablePreviewAudio = true;
         checkNumMode = false;
@@ -173,6 +175,7 @@ public final class PictureSelectionConfig implements Parcelable {
         dest.writeByte(this.isGif ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enablePreview ? (byte) 1 : (byte) 0);
         dest.writeByte(this.cameraVoice ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.cameraFacing ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enPreviewVideo ? (byte) 1 : (byte) 0);
         dest.writeByte(this.enablePreviewAudio ? (byte) 1 : (byte) 0);
         dest.writeByte(this.checkNumMode ? (byte) 1 : (byte) 0);
@@ -223,6 +226,7 @@ public final class PictureSelectionConfig implements Parcelable {
         this.isGif = in.readByte() != 0;
         this.enablePreview = in.readByte() != 0;
         this.cameraVoice = in.readByte() != 0;
+        this.cameraFacing = in.readByte() != 0;
         this.enPreviewVideo = in.readByte() != 0;
         this.enablePreviewAudio = in.readByte() != 0;
         this.checkNumMode = in.readByte() != 0;
