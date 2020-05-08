@@ -168,19 +168,19 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         switch (flashEnum) {
             case FlashEnum.AUTO:
                 camera.setFlash(Flash.AUTO);
-                imgFlash.setBackgroundResource(R.drawable.ic_flash_auto);
+                imgFlash.setBackgroundResource(R.drawable.ic_camera_flash_auto);
                 break;
             case FlashEnum.ON:
                 camera.setFlash(Flash.ON);
-                imgFlash.setBackgroundResource(R.drawable.ic_flash_open);
+                imgFlash.setBackgroundResource(R.drawable.ic_camera_flash_open);
                 break;
             case FlashEnum.OFF:
                 camera.setFlash(Flash.OFF);
-                imgFlash.setBackgroundResource(R.drawable.ic_flash_close);
+                imgFlash.setBackgroundResource(R.drawable.ic_camera_flash_close);
                 break;
             case FlashEnum.TORCH:
                 camera.setFlash(Flash.TORCH);
-                imgFlash.setBackgroundResource(R.drawable.ic_flash_torch);
+                imgFlash.setBackgroundResource(R.drawable.ic_camera_flash_torch);
                 break;
         }
     }

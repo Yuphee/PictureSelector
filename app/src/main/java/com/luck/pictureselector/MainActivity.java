@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //.videoQuality()// 视频录制质量 0 or 1
                         //.videoSecond()////显示多少秒以内的视频or音频也可适用
                         .cameraVoice(cb_camera_voice.isChecked())
-                        .cameraFacing(true) //是否允许切换前置摄像头
+                        //.cameraFacing(true) //是否允许切换前置摄像头
                         // .cameraMask(R.drawable.img_camera_mask) //拍照覆盖图层
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
             } else if (mode) {
