@@ -1,6 +1,7 @@
 package com.luck.picture.lib;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -372,7 +374,17 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     }
 
     public void startCustomCamera() {
-        Intent cameraIntent = new Intent(PictureConfig.ACTION_CUSTOM_CAMERA);
+        Class<Activity> clazz = null;
+        Intent cameraIntent;
+        try {
+            clazz = (Class<Activity>) Class.forName("com.heiko.camera.CameraActivity");
+            cameraIntent = new Intent(this, clazz);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(PictureSelectorActivity.this, "自定义相机不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             int type = config.mimeType == PictureConfig.TYPE_ALL ? PictureConfig.TYPE_IMAGE : config.mimeType;
             File cameraFile = PictureFileUtils.createCameraFile(this,

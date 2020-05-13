@@ -10,10 +10,10 @@
         <activity android:name=".CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen.Camera">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="action.picture_selector.custom_camera" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".ImagePreviewActivity"
             android:screenOrientation="portrait"
