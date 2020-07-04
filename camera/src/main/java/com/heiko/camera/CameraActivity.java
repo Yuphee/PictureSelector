@@ -40,6 +40,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     // To show stuff in the callback
     private Size mCaptureNativeSize;
     private long mCaptureTime;
+    private long mTakePictureTime;
+    private long mFlashTime;
 
     public static final String TAG = "Picture-CameraActivity";
     private String outputPath;
@@ -88,7 +90,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         findViewById(R.id.btn_photo).setOnClickListener(this);
-        findViewById(R.id.btn_click).setOnClickListener(this);
 
         Log.v(TAG, "onCreate");
         Bundle extras = getIntent().getExtras();
@@ -111,6 +112,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         layoutFlash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long dTime = System.currentTimeMillis() - mFlashTime;
+                Log.i(TAG, "layoutFlash dTime:" + dTime);
+                if (dTime <= 600) return;
+                mFlashTime = System.currentTimeMillis();
+
                 int flashState = Integer.valueOf(imgFlash.getTag().toString());
                 flashState = (++flashState) % 4;
                 setFlash(flashState);
@@ -189,7 +195,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private void onPicture(final byte[] jpeg) {
         mCapturingPicture = false;
         long callbackTime = System.currentTimeMillis();
-        Log.i(TAG, "onPicture:"+callbackTime);
 
         // This can happen if picture was taken with a gesture.
         if (mCaptureTime == 0) mCaptureTime = callbackTime - 300;
@@ -241,19 +246,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if (view.getId() == R.id.btn_photo) {
             capturePhoto();
-        } else if(view.getId() == R.id.btn_click){
-            Log.i(TAG, "click:" + System.currentTimeMillis());
         }
     }
 
     private void capturePhoto() {
+        long dTime = System.currentTimeMillis() - mTakePictureTime;
+        Log.i(TAG, "takePicture dTime:" + dTime);
+        if (dTime <= 1000) return;
+        mTakePictureTime = System.currentTimeMillis();
+
         if (mCapturingPicture) return;
         mCapturingPicture = true;
         mCaptureTime = System.currentTimeMillis();
         mCaptureNativeSize = camera.getPictureSize();
         //camera.capturePicture();
-        Log.i(TAG, "takePicture:"+mCaptureTime);
         camera.takePicture();
+        Log.i(TAG, "takePicture>>>");
 
         Intent intent = new Intent("action.com.luck.pictureselector.takePicture");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
