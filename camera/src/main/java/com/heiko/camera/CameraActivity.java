@@ -113,7 +113,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 long dTime = System.currentTimeMillis() - mFlashTime;
-                Log.i(TAG, "layoutFlash dTime:" + dTime);
+                Log.i(TAG, "layoutFlash click dTime:" + dTime);
                 if (dTime <= 600) return;
                 mFlashTime = System.currentTimeMillis();
 
