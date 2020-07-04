@@ -252,7 +252,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private void capturePhoto() {
         long dTime = System.currentTimeMillis() - mTakePictureTime;
         Log.i(TAG, "takePicture dTime:" + dTime);
-        if (dTime <= 1000) return;
+        if (dTime <= 1500) return;
         mTakePictureTime = System.currentTimeMillis();
 
         if (mCapturingPicture) return;
