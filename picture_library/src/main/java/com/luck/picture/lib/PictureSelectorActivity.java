@@ -1050,12 +1050,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                                 ? View.INVISIBLE : View.VISIBLE);
                     }
 
-                    if (config.mimeType != PictureMimeType.ofAudio()) {
-                        int lastImageId = getLastImageId(eqVideo);
-                        if (lastImageId != -1) {
-                            removeImage(lastImageId, eqVideo);
-                        }
-                    }
+//                    if (config.mimeType != PictureMimeType.ofAudio()) {
+//                        int lastImageId = getLastImageId(eqVideo);
+//                        if (lastImageId != -1) {
+//                            removeImage(lastImageId, eqVideo);
+//                        }
+//                    }
                     break;
             }
         } else if (resultCode == RESULT_CANCELED) {

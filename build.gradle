@@ -3,7 +3,17 @@ apply from: "config.gradle"
 
 buildscript {
     repositories {
-        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven {
+            url "http://nexus.xiaoliuapp.com/repository/AndroidGroup/"
+        }
+        maven {
+            url "http://nexus.xiaoliuapp.com/repository/Android-Google/"
+        }
+        mavenCentral()
         google()
     }
     dependencies {
@@ -19,7 +29,17 @@ allprojects {
     group = GROUP
 
     repositories {
-        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven {
+            url "http://nexus.xiaoliuapp.com/repository/AndroidGroup/"
+        }
+        maven {
+            url "http://nexus.xiaoliuapp.com/repository/Android-Google/"
+        }
+        mavenCentral()
         google()
     }
 }
